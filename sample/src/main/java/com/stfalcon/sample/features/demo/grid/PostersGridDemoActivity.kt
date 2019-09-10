@@ -13,7 +13,18 @@ import kotlinx.android.synthetic.main.activity_demo_posters_grid.*
 
 class PostersGridDemoActivity : AppCompatActivity() {
 
-    private lateinit var viewer: StfalconImageViewer<Poster>
+    private val list = listOf(
+            ImageWithVideo("${Demo.POSTERS_PATH}/Vincent.jpg", "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Jules.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Korben.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Toretto.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Marty.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Driver.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Frank.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Max.jpg", null),
+            ImageWithVideo("${Demo.POSTERS_PATH}/Daniel.jpg", null))
+
+    private lateinit var viewer: StfalconImageViewer<ImageWithVideo>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +37,8 @@ class PostersGridDemoActivity : AppCompatActivity() {
     }
 
     private fun openViewer(startPosition: Int, target: ImageView) {
-        viewer = StfalconImageViewer.Builder<Poster>(this, Demo.posters, ::loadPosterImage)
-            .withStartPosition(startPosition)
+        viewer = StfalconImageViewer.Builder<ImageWithVideo>(this, list, this::loadImage, ::TestViewHolder)
+                .withStartPosition(startPosition)
             .withTransitionFrom(target)
             .withImageChangeListener {
                 viewer.updateTransitionImage(postersGridView.imageViews[it])
@@ -39,6 +50,13 @@ class PostersGridDemoActivity : AppCompatActivity() {
         imageView.apply {
             background = getDrawableCompat(R.drawable.shape_placeholder)
             loadImage(poster?.url)
+        }
+    }
+
+    private fun loadImage(imageView: ImageView, poster: ImageWithVideo?) {
+        imageView.apply {
+            background = getDrawableCompat(R.drawable.shape_placeholder)
+            loadImage(poster?.imageUrl)
         }
     }
 }

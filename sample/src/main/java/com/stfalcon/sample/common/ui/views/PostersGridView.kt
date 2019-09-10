@@ -40,6 +40,7 @@ class PostersGridView @JvmOverloads constructor(
         super.onAttachedToWindow()
 
         imageViews.values.forEachIndexed { index, imageView ->
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
             imageLoader?.invoke(imageView, Demo.posters.getOrNull(index))
             imageView.setOnClickListener { onPosterClick?.invoke(index, imageView) }
         }

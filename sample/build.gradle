@@ -28,6 +28,8 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.transition:transition:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'com.github.chrisbanes:PhotoView:2.2.0'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 
     //UI
     implementation 'com.squareup.picasso:picasso:2.71828'

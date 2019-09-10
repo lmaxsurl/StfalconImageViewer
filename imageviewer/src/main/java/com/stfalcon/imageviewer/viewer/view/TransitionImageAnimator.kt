@@ -21,9 +21,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.transition.AutoTransition
-import androidx.transition.Transition
-import androidx.transition.TransitionManager
+import androidx.transition.*
 import com.stfalcon.imageviewer.common.extensions.addListener
 import com.stfalcon.imageviewer.common.extensions.applyMargin
 import com.stfalcon.imageviewer.common.extensions.globalVisibleRect
@@ -86,6 +84,7 @@ internal class TransitionImageAnimator(
         isAnimating = true
         prepareTransitionLayout()
 
+        externalImage?.scaleType?.let(internalImage::setScaleType)
         internalRoot.postApply {
             //ain't nothing but a kludge to prevent blinking when transition is starting
             externalImage?.postDelayed(50) { visibility = View.INVISIBLE }
@@ -97,6 +96,7 @@ internal class TransitionImageAnimator(
                 }
             })
 
+            internalImage.scaleType = ImageView.ScaleType.FIT_CENTER
             internalImageContainer.makeViewMatchParent()
             internalImage.makeViewMatchParent()
 
@@ -118,6 +118,7 @@ internal class TransitionImageAnimator(
             internalRoot, createTransition { handleCloseTransitionEnd(onTransitionEnd) })
 
         prepareTransitionLayout()
+        externalImage?.scaleType?.let(internalImage::setScaleType)
         internalImageContainer.requestLayout()
     }
 
@@ -153,8 +154,12 @@ internal class TransitionImageAnimator(
     }
 
     private fun createTransition(onTransitionEnd: (() -> Unit)? = null): Transition =
-        AutoTransition()
-            .setDuration(transitionDuration)
-            .setInterpolator(DecelerateInterpolator())
-            .addListener(onTransitionEnd = { onTransitionEnd?.invoke() })
+            TransitionSet().apply {
+                ordering = TransitionSet.ORDERING_TOGETHER
+                addTransition(ChangeBounds())
+                addTransition(ChangeImageTransform())
+            }
+                    .setDuration(transitionDuration)
+                    .setInterpolator(DecelerateInterpolator())
+                    .addListener(onTransitionEnd = { onTransitionEnd?.invoke() })
 }

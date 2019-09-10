@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.stfalcon.sample.video.EasyVideoPlayer
+        android:id="@+id/video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        attr:evp_loop="true"
+        attr:evp_disableControls="true"
+        attr:evp_autoPlay="true" />
+
+    <View
+        android:id="@+id/stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>
