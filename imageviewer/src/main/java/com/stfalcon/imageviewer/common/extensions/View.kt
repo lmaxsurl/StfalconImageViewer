@@ -20,6 +20,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.Rect
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewConfiguration
 import android.view.ViewGroup
@@ -52,7 +54,7 @@ internal fun View.makeGone() {
 }
 
 internal inline fun <T : View> T.postApply(crossinline block: T.() -> Unit) {
-    post { apply(block) }
+    Handler(Looper.getMainLooper()).post { apply(block) }
 }
 
 internal inline fun <T : View> T.postDelayed(delayMillis: Long, crossinline block: T.() -> Unit) {

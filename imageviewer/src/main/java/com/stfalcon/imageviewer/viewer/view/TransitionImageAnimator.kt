@@ -16,6 +16,8 @@
 
 package com.stfalcon.imageviewer.viewer.view
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
@@ -141,7 +143,7 @@ internal class TransitionImageAnimator(
 
     private fun handleCloseTransitionEnd(onTransitionEnd: () -> Unit) {
         externalImage?.visibility = View.VISIBLE
-        externalImage?.post { onTransitionEnd() }
+        Handler(Looper.getMainLooper()).post { onTransitionEnd() }
         isAnimating = false
     }
 
