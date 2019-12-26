@@ -112,6 +112,7 @@ public class StfalconImageViewer<T> {
 
         private Context context;
         private BuilderData<T> data;
+        private Integer resourceId;
 
         public Builder(Context context, T[] images, ImageLoader<T> imageLoader) {
             this(context, new ArrayList<>(Arrays.asList(images)), imageLoader);
@@ -299,6 +300,11 @@ public class StfalconImageViewer<T> {
             return this;
         }
 
+        public Builder<T> withCustomDialogStyle(Integer resourceId) {
+            this.resourceId = resourceId;
+            return this;
+        }
+
         /**
          * Creates a {@link StfalconImageViewer} with the arguments supplied to this builder. It does not
          * show the dialog. This allows the user to do any extra processing
@@ -306,7 +312,7 @@ public class StfalconImageViewer<T> {
          * to do and want this to be created and displayed.
          */
         public StfalconImageViewer<T> build() {
-            return new StfalconImageViewer<>(context, data, null);
+            return new StfalconImageViewer<>(context, data, resourceId);
         }
 
         /**
