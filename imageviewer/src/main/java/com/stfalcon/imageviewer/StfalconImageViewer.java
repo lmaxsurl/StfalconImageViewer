@@ -41,10 +41,10 @@ public class StfalconImageViewer<T> {
     private BuilderData<T> builderData;
     private ImageViewerDialog<T> dialog;
 
-    protected StfalconImageViewer(@NonNull Context context, @NonNull BuilderData<T> builderData) {
+    protected StfalconImageViewer(@NonNull Context context, @NonNull BuilderData<T> builderData, @Nullable Integer styleResourceId) {
         this.context = context;
         this.builderData = builderData;
-        this.dialog = new ImageViewerDialog<>(context, builderData);
+        this.dialog = new ImageViewerDialog<>(context, builderData, styleResourceId);
     }
 
     /**
@@ -306,7 +306,7 @@ public class StfalconImageViewer<T> {
          * to do and want this to be created and displayed.
          */
         public StfalconImageViewer<T> build() {
-            return new StfalconImageViewer<>(context, data);
+            return new StfalconImageViewer<>(context, data, null);
         }
 
         /**

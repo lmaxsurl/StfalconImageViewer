@@ -26,7 +26,8 @@ import com.stfalcon.imageviewer.viewer.view.ImageViewerView
 
 internal class ImageViewerDialog<T>(
     context: Context,
-    private val builderData: BuilderData<T>
+    private val builderData: BuilderData<T>,
+    private val styleResourceId: Int? = null
 ) {
 
     private val dialog: AlertDialog
@@ -35,7 +36,7 @@ internal class ImageViewerDialog<T>(
 
     private val dialogStyle: Int
         get() = if (builderData.shouldStatusBarHide)
-            R.style.ImageViewerDialog_NoStatusBar
+            styleResourceId ?: R.style.ImageViewerDialog_NoStatusBar
         else
             R.style.ImageViewerDialog_Default
 
