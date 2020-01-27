@@ -114,6 +114,6 @@ internal class ImageViewerDialog<T>(
     }
 
     private fun initTransitionView() {
-        builderData.targetViewProvider?.getTargetView(viewerView.currentPosition)?.let { builderData.transitionView = it }
+        builderData.targetViewProvider?.getTargetView(viewerView.currentPosition)?.let(viewerView::updateTransitionImage)
     }
 }
