@@ -68,6 +68,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
 
     internal var onDismiss: (() -> Unit)? = null
     internal var onTouch: (() -> Unit)? = null
+    internal var onClose: (() -> Unit)? = null
     internal var onPageChange: ((position: Int) -> Unit)? = null
 
     internal val isScaled
@@ -206,6 +207,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
     }
 
     internal fun close() {
+        onClose?.invoke()
         if (shouldDismissToBottom) {
             swipeDismissHandler.initiateDismissToBottom()
         } else {

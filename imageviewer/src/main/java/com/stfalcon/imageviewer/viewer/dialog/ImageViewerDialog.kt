@@ -105,11 +105,9 @@ internal class ImageViewerDialog<T>(
                     builderData.viewHolderLoader)
 
             onPageChange = { position -> builderData.imageChangeListener?.onImageChange(position) }
-            onDismiss = {
-                initTransitionView()
-                dialog.dismiss()
-            }
+            onDismiss = { dialog.dismiss() }
             onTouch = { initTransitionView() }
+            onClose = { initTransitionView() }
         }
     }
 
