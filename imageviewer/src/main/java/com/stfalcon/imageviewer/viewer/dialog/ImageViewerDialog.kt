@@ -19,6 +19,7 @@ package com.stfalcon.imageviewer.viewer.dialog
 import android.content.Context
 import android.view.KeyEvent
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.stfalcon.imageviewer.R
 import com.stfalcon.imageviewer.viewer.builder.BuilderData
@@ -105,6 +106,7 @@ internal class ImageViewerDialog<T>(
 
             onPageChange = { position -> builderData.imageChangeListener?.onImageChange(position) }
             onDismiss = { dialog.dismiss() }
+            onTouch = { builderData.onTouchEventListener?.onTouch(builderData.transitionView) }
         }
     }
 }

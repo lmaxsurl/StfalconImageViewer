@@ -67,6 +67,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
         }
 
     internal var onDismiss: (() -> Unit)? = null
+    internal var onTouch: (() -> Unit)? = null
     internal var onPageChange: ((position: Int) -> Unit)? = null
 
     internal val isScaled
@@ -288,6 +289,7 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
 
         if (event.action == MotionEvent.ACTION_DOWN) {
             handleEventActionDown(event)
+            onTouch?.invoke()
         }
 
         scaleDetector.onTouchEvent(event)
