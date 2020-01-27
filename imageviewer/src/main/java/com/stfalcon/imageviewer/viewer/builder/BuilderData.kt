@@ -22,6 +22,7 @@ import android.widget.ImageView
 import com.stfalcon.imageviewer.listeners.OnDismissListener
 import com.stfalcon.imageviewer.listeners.OnImageChangeListener
 import com.stfalcon.imageviewer.listeners.OnTouchEventListener
+import com.stfalcon.imageviewer.listeners.TargetViewProvider
 import com.stfalcon.imageviewer.viewer.viewholder.DefaultViewHolderLoader
 import com.stfalcon.imageviewer.loader.ImageLoader
 import com.stfalcon.imageviewer.viewer.viewholder.ViewHolderLoader
@@ -34,7 +35,7 @@ internal class BuilderData<T>(
     var startPosition: Int = 0
     var imageChangeListener: OnImageChangeListener? = null
     var onDismissListener: OnDismissListener? = null
-    var onTouchEventListener: OnTouchEventListener? = null
+    var targetViewProvider: TargetViewProvider? = null
     var overlayView: View? = null
     var imageMarginPixels: Int = 0
     var containerPaddingPixels = IntArray(4)

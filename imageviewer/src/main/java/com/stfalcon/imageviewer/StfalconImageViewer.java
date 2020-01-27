@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import com.stfalcon.imageviewer.listeners.OnDismissListener;
 import com.stfalcon.imageviewer.listeners.OnImageChangeListener;
 import com.stfalcon.imageviewer.listeners.OnTouchEventListener;
+import com.stfalcon.imageviewer.listeners.TargetViewProvider;
 import com.stfalcon.imageviewer.loader.ImageLoader;
 import com.stfalcon.imageviewer.viewer.viewholder.ViewHolderLoader;
 import com.stfalcon.imageviewer.viewer.builder.BuilderData;
@@ -301,8 +302,8 @@ public class StfalconImageViewer<T> {
             return this;
         }
 
-        public Builder<T> withTouchListener(OnTouchEventListener onTouchEventListener) {
-            this.data.setOnTouchEventListener(onTouchEventListener);
+        public Builder<T> withTargetViewProvider(@Nullable TargetViewProvider provider) {
+            this.data.setTargetViewProvider(provider);
             return this;
         }
 
