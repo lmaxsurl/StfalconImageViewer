@@ -16,15 +16,13 @@
 
 package com.stfalcon.imageviewer.viewer.view
 
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.transition.*
-import com.stfalcon.imageviewer.common.extensions.addListener
+import com.stfalcon.imageviewer.common.extensions.*
 import com.stfalcon.imageviewer.common.extensions.applyMargin
 import com.stfalcon.imageviewer.common.extensions.globalVisibleRect
 import com.stfalcon.imageviewer.common.extensions.isRectVisible
@@ -35,9 +33,9 @@ import com.stfalcon.imageviewer.common.extensions.postDelayed
 import com.stfalcon.imageviewer.common.extensions.requestNewSize
 
 internal class TransitionImageAnimator(
-    private val externalImage: ImageView?,
-    private val internalImage: ImageView,
-    private val internalImageContainer: FrameLayout
+        private val externalImage: ImageView?,
+        private val internalImage: ImageView,
+        private val internalImageContainer: FrameLayout
 ) {
 
     companion object {
@@ -56,11 +54,11 @@ internal class TransitionImageAnimator(
         get() = internalImageContainer.parent as ViewGroup
 
     internal fun animateOpen(
-        containerPadding: IntArray,
-        onTransitionStart: (Long) -> Unit,
-        onTransitionEnd: () -> Unit
+            containerPadding: IntArray,
+            onTransitionStart: (Long) -> Unit,
+            onTransitionEnd: () -> Unit
     ) {
-        if (externalImage.isRectVisible) {
+        if (externalImage.isVisible) {
             onTransitionStart(TRANSITION_DURATION_OPEN)
             doOpenTransition(containerPadding, onTransitionEnd)
         } else {
@@ -69,9 +67,9 @@ internal class TransitionImageAnimator(
     }
 
     internal fun animateClose(
-        shouldDismissToBottom: Boolean,
-        onTransitionStart: (Long) -> Unit,
-        onTransitionEnd: () -> Unit
+            shouldDismissToBottom: Boolean,
+            onTransitionStart: (Long) -> Unit,
+            onTransitionEnd: () -> Unit
     ) {
         if (externalImage.isRectVisible && !shouldDismissToBottom) {
             onTransitionStart(TRANSITION_DURATION_CLOSE)
@@ -86,7 +84,6 @@ internal class TransitionImageAnimator(
         isAnimating = true
         prepareTransitionLayout()
 
-        externalImage?.scaleType?.let(internalImage::setScaleType)
         internalRoot.postApply {
             //ain't nothing but a kludge to prevent blinking when transition is starting
             externalImage?.postDelayed(50) { visibility = View.INVISIBLE }
@@ -98,15 +95,15 @@ internal class TransitionImageAnimator(
                 }
             })
 
-            internalImage.scaleType = ImageView.ScaleType.FIT_CENTER
             internalImageContainer.makeViewMatchParent()
             internalImage.makeViewMatchParent()
+            internalImage.scaleType = ImageView.ScaleType.FIT_CENTER
 
             internalRoot.applyMargin(
-                containerPadding[0],
-                containerPadding[1],
-                containerPadding[2],
-                containerPadding[3])
+                    containerPadding[0],
+                    containerPadding[1],
+                    containerPadding[2],
+                    containerPadding[3])
 
             internalImageContainer.requestLayout()
         }
@@ -117,10 +114,9 @@ internal class TransitionImageAnimator(
         isClosing = true
 
         TransitionManager.beginDelayedTransition(
-            internalRoot, createTransition { handleCloseTransitionEnd(onTransitionEnd) })
+                internalRoot, createTransition { handleCloseTransitionEnd(onTransitionEnd) })
 
         prepareTransitionLayout()
-        externalImage?.scaleType?.let(internalImage::setScaleType)
         internalImageContainer.requestLayout()
     }
 
@@ -137,31 +133,38 @@ internal class TransitionImageAnimator(
                 }
             }
 
+            internalImage.scaleType = it.scaleType
+
             resetRootTranslation()
         }
     }
 
     private fun handleCloseTransitionEnd(onTransitionEnd: () -> Unit) {
         externalImage?.visibility = View.VISIBLE
-        Handler(Looper.getMainLooper()).post { onTransitionEnd() }
+        internalImage.post { onTransitionEnd() }
         isAnimating = false
     }
 
     private fun resetRootTranslation() {
         internalRoot
-            .animate()
-            .translationY(0f)
-            .setDuration(transitionDuration)
-            .start()
+                .animate()
+                .translationY(0f)
+                .setDuration(transitionDuration)
+                .start()
     }
 
-    private fun createTransition(onTransitionEnd: (() -> Unit)? = null): Transition =
-            TransitionSet().apply {
-                ordering = TransitionSet.ORDERING_TOGETHER
-                addTransition(ChangeBounds())
-                addTransition(ChangeImageTransform())
-            }
-                    .setDuration(transitionDuration)
-                    .setInterpolator(DecelerateInterpolator())
-                    .addListener(onTransitionEnd = { onTransitionEnd?.invoke() })
+    private fun createTransition(onTransitionEnd: (() -> Unit)? = null): Transition {
+        var transition =
+                TransitionSet ()
+                        .setOrdering(TransitionSet.ORDERING_TOGETHER)
+                        .addTransition(ChangeBounds())
+                        .addTransition(ChangeTransform())
+                        .addTransition(ChangeClipBounds())
+                        .addTransition(ChangeImageTransform())
+
+        return transition
+                .setDuration(transitionDuration)
+                .setInterpolator(DecelerateInterpolator())
+                .addListener(onTransitionEnd = { onTransitionEnd?.invoke() })
+    }
 }
