@@ -155,8 +155,12 @@ internal class ImageViewerView<T> @JvmOverloads constructor(
         if (overlayView.isVisible && overlayView?.dispatchTouchEvent(event) == true) {
             return true
         }
+        
+        if (!::transitionImageAnimator.isInitialized) {
+            return true
+        }
 
-        if (!::transitionImageAnimator.isInitialized || transitionImageAnimator.isAnimating) {
+        if (transitionImageAnimator.isAnimating) {
             return true
         }
 
